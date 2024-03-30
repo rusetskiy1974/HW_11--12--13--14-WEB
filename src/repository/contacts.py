@@ -2,7 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import date
 
-from src.entity.models import Contact
+from src.entity.models import Contact, User
 from src.schemas.contact import ContactSchema, ContactUpdateSchema
 
 
@@ -17,50 +17,56 @@ def days_to_birthday(self):
     return (closest_birthday - today).days
 
 
-async def get_contacts_birthday(limit: int, offset: int, db: AsyncSession):
-    stmt = select(Contact).offset(offset).limit(limit)
+async def get_contacts_birthday(limit: int, offset: int, db: AsyncSession, user: User):
+    stmt = select(Contact).filter_by(user=user).offset(offset).limit(limit)
     contacts = await db.execute(stmt)
     results = list(contacts.scalars().all())
 
     return [contact for contact in results if days_to_birthday(contact.birth_date) <= 7]
 
 
-async def get_contacts(limit: int, offset: int, db: AsyncSession):
+async def get_contacts(limit: int, offset: int, db: AsyncSession, user: User):
+    stmt = select(Contact).filter_by(user=user).offset(offset).limit(limit)
+    contacts = await db.execute(stmt)
+    return contacts.scalars().all()
+
+
+async def get_all_contacts(limit: int, offset: int, db: AsyncSession):
     stmt = select(Contact).offset(offset).limit(limit)
     contacts = await db.execute(stmt)
     return contacts.scalars().all()
 
 
-async def get_contacts_first_name(first_name: str, limit: int, offset: int, db: AsyncSession):
-    stmt = select(Contact).filter_by(first_name=first_name).offset(offset).limit(limit)
+async def get_contacts_first_name(first_name: str, limit: int, offset: int, db: AsyncSession, user: User):
+    stmt = select(Contact).filter_by(first_name=first_name, user=user).offset(offset).limit(limit)
     contacts = await db.execute(stmt)
     return contacts.scalars().all()
 
 
-async def get_contacts_last_name(last_name: str, limit: int, offset: int, db: AsyncSession):
-    stmt = select(Contact).filter_by(first_name=last_name).offset(offset).limit(limit)
+async def get_contacts_last_name(last_name: str, limit: int, offset: int, db: AsyncSession, user: User):
+    stmt = select(Contact).filter_by(last_name=last_name, user=user).offset(offset).limit(limit)
     contacts = await db.execute(stmt)
     return contacts.scalars().all()
 
 
-async def get_contact_email(email: str, db: AsyncSession):
-    stmt = select(Contact).filter_by(email=email)
+async def get_contact_email(email: str, db: AsyncSession, user: User):
+    stmt = select(Contact).filter_by(email=email, user=user)
     contact = await db.execute(stmt)
     return contact.scalar_one_or_none()
 
 
-async def get_contact(contact_id: int, db: AsyncSession):
-    stmt = select(Contact).filter_by(id=contact_id)
+async def get_contact(contact_id: int, db: AsyncSession, user: User):
+    stmt = select(Contact).filter_by(id=contact_id, user=user)
     contact = await db.execute(stmt)
     return contact.scalar_one_or_none()
 
 
-async def create_contact(body: ContactSchema, db: AsyncSession):
-    stmt = select(Contact).filter_by(email=body.email)
+async def create_contact(body: ContactSchema, db: AsyncSession, user: User):
+    stmt = select(Contact).filter_by(email=body.email, user=user)
     result = await db.execute(stmt)
     contact_ = result.scalar_one_or_none()
     if contact_ is None:
-        contact = Contact(**body.model_dump(exclude_unset=True))
+        contact = Contact(**body.model_dump(exclude_unset=True), user=user)
         db.add(contact)
         await db.commit()
         await db.refresh(contact)
@@ -68,8 +74,8 @@ async def create_contact(body: ContactSchema, db: AsyncSession):
     return
 
 
-async def update_contact(contact_id: int, body: ContactUpdateSchema, db: AsyncSession):
-    stmt = select(Contact).filter_by(id=contact_id)
+async def update_contact(contact_id: int, body: ContactUpdateSchema, db: AsyncSession, user: User):
+    stmt = select(Contact).filter_by(id=contact_id, user=user)
     result = await db.execute(stmt)
     contact = result.scalar_one_or_none()
 
@@ -90,8 +96,8 @@ async def update_contact(contact_id: int, body: ContactUpdateSchema, db: AsyncSe
     return contact
 
 
-async def delete_contact(contact_id: int, db: AsyncSession):
-    stmt = select(Contact).filter_by(id=contact_id)
+async def delete_contact(contact_id: int, db: AsyncSession, user: User):
+    stmt = select(Contact).filter_by(id=contact_id, user=user)
     contact = await db.execute(stmt)
     contact = contact.scalar_one_or_none()
     if contact:

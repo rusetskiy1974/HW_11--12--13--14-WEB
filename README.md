@@ -1,4 +1,4 @@
-HW_11 PYTHON WEB
+HW_11 -> 12 PYTHON WEB
 
 docker-compose.yaml --створюємо контейнер для Postgres
 

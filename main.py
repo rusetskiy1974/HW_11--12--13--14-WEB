@@ -1,4 +1,6 @@
-from fastapi import FastAPI, HTTPException, Depends, Request
+import uvicorn
+
+from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -30,3 +32,6 @@ async def healthchecker(db: AsyncSession = Depends(get_db)):
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail="Error connecting to the database")
+
+if __name__ == '__main__':
+    uvicorn.run(app, host="localhost", port=8000)

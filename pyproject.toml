@@ -17,6 +17,7 @@ libgravatar = "^1.0.4"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-multipart = "^0.0.9"
 python-jose = "^3.3.0"
+fastapi-mail = "^1.4.1"
 
 
 [build-system]

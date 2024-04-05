@@ -22,6 +22,11 @@ class UserResponse(BaseModel):
         from_attributes = True
 
 
+class UserResponseSchema(BaseModel):
+    user: UserResponse
+    detail: str
+
+
 class TokenSchema(BaseModel):
     access_token: str
     refresh_token: str
@@ -30,3 +35,7 @@ class TokenSchema(BaseModel):
 
 class LogoutResponse(BaseModel):
     result: str
+
+
+class RequestEmail(BaseModel):
+    email: EmailStr

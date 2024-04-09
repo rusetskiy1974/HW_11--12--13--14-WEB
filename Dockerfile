@@ -8,4 +8,3 @@ COPY . /fastapi_proj
 
 RUN poetry install
 
-#CMD ["poetry", "run", "python", "main.py"]

@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from typing import Optional
+from src.conf.config import settings
 
 from fastapi import Depends, HTTPException, status
 from passlib.context import CryptContext
@@ -13,8 +14,8 @@ from src.repository import users as repositories_users
 
 class Auth:
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    SECRET_KEY = "81ca0de60255b6e2b16b03a717a11c35dc24d8e565fd4f388a876de40d21d9ce"  # TODO to ENV file
-    ALGORITHM = "HS256"
+    SECRET_KEY = settings.secret_key
+    ALGORITHM = settings.algorithm
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login")
 
     def verify_password(self, plain_password, hashed_password):

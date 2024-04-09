@@ -1,8 +1,8 @@
 import contextlib
+import redis.asyncio as redis_async
+from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker, create_async_engine
 
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker, create_async_engine
-
-from src.conf.config import config
+from src.conf.config import settings
 
 
 class DatabaseSessionManager:
@@ -26,9 +26,14 @@ class DatabaseSessionManager:
             await session.close()
 
 
-sessionmanager = DatabaseSessionManager(config.DB_URL)
+sessionmanager = DatabaseSessionManager(settings.db_url)
 
 
 async def get_db():
     async with sessionmanager.session() as session:
         yield session
+
+
+db_redis = redis_async.Redis(host=settings.redis_host, port=settings.redis_port, db=0, encoding="utf-8",
+                             decode_responses=True)
+

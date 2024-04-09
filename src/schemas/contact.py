@@ -3,7 +3,7 @@ from datetime import date, datetime
 
 from pydantic import BaseModel, EmailStr, Field
 
-from src.schemas.user import UserResponse
+from src.schemas.user import UserDb
 
 
 class ContactSchema(BaseModel):
@@ -29,7 +29,7 @@ class ContactResponse(BaseModel):
     friend_status: bool
     created_at: datetime | None
     updated_at: datetime | None
-    user: UserResponse | None
+    user: UserDb | None
 
     class Config:
         from_attributes = True

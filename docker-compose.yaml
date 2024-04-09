@@ -2,17 +2,46 @@ version: "3.9"
 
 
 services:
-    postgres:
-      container_name: postgres_container1
-      image: postgres
-      environment:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: 567234
-          PGDATA: /data/postgres
-      volumes:
-        - postgres:/data/postgres
-      ports:
-        - "5432:5432"
-      restart: unless-stopped
+  redis_server:
+    container_name: redis_hw13
+    image: redis:latest
+    environment:
+      - REDIS_PORT=${REDIS_PORT}
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+
+  postgres:
+    container_name: postgres_container_hw13
+    image: postgres
+    environment:
+        POSTGRES_USER: ${DB_ADMIN}
+        POSTGRES_PASSWORD: ${DB_PASSWORD}
+        POSTGRES_DB: ${DB_NAME}
+        PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  our_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DB_URL=${DB_URL}
+    image: 'my-fastapi-hw13'
+    ports:
+      - 9000:8000
+    depends_on:
+      - redis_server
+      - postgres
+    command: >
+      sh -c "poetry run alembic upgrade head &&
+      poetry run python main.py"
+
+
 volumes:
     postgres:
+
+

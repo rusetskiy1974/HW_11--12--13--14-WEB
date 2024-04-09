@@ -11,7 +11,7 @@ class UserSchema(BaseModel):
     password: str = Field(min_length=6, max_length=12)
 
 
-class UserResponse(BaseModel):
+class UserDb(BaseModel):
     id: int = 1
     username: str
     user_email: EmailStr
@@ -23,8 +23,8 @@ class UserResponse(BaseModel):
 
 
 class UserResponseSchema(BaseModel):
-    user: UserResponse
-    detail: str
+    user: UserDb
+    detail: str = "User successfully created."
 
 
 class TokenSchema(BaseModel):
@@ -39,3 +39,7 @@ class LogoutResponse(BaseModel):
 
 class RequestEmail(BaseModel):
     email: EmailStr
+
+
+class RequestNewPassword(BaseModel):
+    new_password: str = Field(min_length=6, max_length=12)

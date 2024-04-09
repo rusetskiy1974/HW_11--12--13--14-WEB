@@ -1,16 +1,8 @@
-HW_11 -> 12 PYTHON WEB
+HW_11 -> 12 -> HW_13 PYTHON WEB
 
-docker-compose.yaml --створюємо контейнер для Postgres
+docker-compose.yaml --розгортаємо проект 
 
-ЗА ДОПОМОГОЮ DBEAVER АБО ІНШОГО ЗАСТОСУНКУ ПІДКЛЮЧАЄМОСЯ ДО БАЗИ POSTGRESS LOGIN: postgres, PASSWORD: 567234
-
-СТВОРЮЄМО НОВУ БАЗУ => hw11
-
-В ТЕРМІНАЛІ => alembic upgrade head  ЗАСТОСОВУЄМО МІГРАЦІЮ  
-
-В ТЕРМІНАЛІ => py main.py  ЗАПУСКАЄМО ДОДАТОК
-
-В БРАУЗЕРІ на localhost:8000/docs  ПРАЦЮЄМО З ЗАСТОСУНКОМ
+В БРАУЗЕРІ на localhost:9000/docs  ПРАЦЮЄМО З ЗАСТОСУНКОМ
 
 ДЛЯ ШЛЯХУ api/contacts/all СТВОРЕНО ДОСТУП ПО РОЛІ, 
 

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends, status, Path, Query
+from fastapi_limiter.depends import RateLimiter
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import EmailStr
 
@@ -72,7 +73,8 @@ async def get_contact(contact_id: int = Path(ge=1), db: AsyncSession = Depends(g
     return contact
 
 
-@router.post("/", response_model=ContactResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=ContactResponse, description='No more than 5 requests per minute',
+             dependencies=[Depends(RateLimiter(times=5, seconds=60))], status_code=status.HTTP_201_CREATED)
 async def create_contact(body: ContactSchema, db: AsyncSession = Depends(get_db),
                          user: User = Depends(auth_service.get_current_user)):
     contact = await repositories_contacts.create_contact(body, db, user)
@@ -101,7 +103,8 @@ async def delete_contact(contact_id: int = Path(ge=1), db: AsyncSession = Depend
     return contact
 
 
-@router.get("/", response_model=list[ContactResponse])
+@router.get("/", response_model=list[ContactResponse], description='No more than 5 requests per minute',
+            dependencies=[Depends(RateLimiter(times=5, seconds=60))])
 async def get_contacts(limit: int = Query(10, ge=10, le=500), offset: int = Query(0, ge=0),
                        db: AsyncSession = Depends(get_db), user: User = Depends(auth_service.get_current_user)):
     contacts = await repositories_contacts.get_contacts(limit, offset, db, user)

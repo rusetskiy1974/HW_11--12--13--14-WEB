@@ -23,6 +23,19 @@ conf = ConnectionConfig(
 
 
 async def send_email(email: EmailStr, username: str, host: str):
+    """
+    The send_email function sends an email to the user with a link to confirm their email address.
+        The function takes in three parameters:
+            -email: EmailStr, the user's email address.
+            -username: str, the username of the user who is registering for an account.  This will be used in a greeting message.
+            -host: str, this is where we are hosting our application (e.g., http://localhost).  This will be used as part of our confirmation link.
+
+    :param email: EmailStr: Specify the email address of the recipient
+    :param username: str: Pass the username to the template
+    :param host: str: Pass the host name to the template
+    :return: A coroutine, which is an object that represents a function that returns a future
+    :doc-author: SergiyRus1974
+    """
     try:
         token_verification = await auth_service.create_email_token({"sub": email})
 
@@ -40,6 +53,19 @@ async def send_email(email: EmailStr, username: str, host: str):
 
 
 async def send_email_reset_password(email: EmailStr, username: str, host: str):
+    """
+    The send_email_reset_password function sends an email to the user with a link to reset their password.
+        Args:
+            email (str): The user's email address.
+            username (str): The username of the user who is requesting a password reset.
+            host (str): The hostname of the server where this function is being called from.
+
+    :param email: EmailStr: Specify the email address of the user
+    :param username: str: Pass the username to the template
+    :param host: str: Create the link for the user to reset their password
+    :return: A coroutine object
+    :doc-author: SergiyRus1974
+    """
     try:
         token_verification = await auth_service.create_email_token({"sub": email})
 

@@ -60,12 +60,30 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations(connection: Connection):
+    """
+    The run_migrations function is a convenience function that allows you to run all of the migrations in your
+        environment, from initial to most recent. It will also automatically create any missing tables and columns
+        as part of the migration process.
+
+    :param connection: Connection: Pass in the connection to the database that is being migrated
+    :return: A boolean value
+    :doc-author: SergiyRus1974
+    """
     context.configure(connection=connection, target_metadata=target_metadata)
     with context.begin_transaction():
         context.run_migrations()
 
 
 async def run_async_migrations():
+    """
+    The run_async_migrations function is a coroutine that will run the migrations
+    asynchronously. It uses the async_engine_from_config function to create an engine
+    that can be used with asynchronous code, and then runs the migrations using that engine.
+
+
+    :return: A coroutine that runs the migrations
+    :doc-author: SergiyRus1974
+    """
     connectable = async_engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",

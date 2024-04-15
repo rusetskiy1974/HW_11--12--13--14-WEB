@@ -1,4 +1,4 @@
-HW_11 -> 12 -> HW_13 PYTHON WEB
+HW_11 -> 12 -> -> 13 -> HW_14 PYTHON WEB
 
 docker-compose.yaml --розгортаємо проект 
 
@@ -9,6 +9,10 @@ docker-compose.yaml --розгортаємо проект
 В POSTGRES ДЛЯ КОРИСТУВАЧА  В РУЧНОМУ РЕЖИМІ ВИБРАТИ  РОЛЬ  admin або moderator
 
 ЗА ЗАМОВЧУВАННЯМ УСІМ КОРИСТУВАЧАМ ПРИ РЕЄСТРАЦІЇ НАДАЄТЬСЯ РОЛЬ user
+
+ПЕРЕГЛЯД ДОКУМЕНТАЦІЇ  В ТЕЦІ  docs/build/html/index.html
+
+ЗАПУСК ТЕСТІВ  В КОНСОЛІ В  КОРЕНІ ПРОЕКТУ  pytest -v
 
 
 
